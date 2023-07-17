@@ -6,7 +6,7 @@ from requests_html import HTMLSession
 import os
 from datetime import date
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # Etf custome class
 
