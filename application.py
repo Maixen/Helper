@@ -66,7 +66,7 @@ def getDataAndPrintOut(data):
 
         data.name = 'ERROR: E404'
 
-@app.route('/')
+@application.route('/')
 def index():
 
     CURRENTDATE = date.today()
@@ -75,14 +75,14 @@ def index():
 
     return render_template('index.html', CURRENTDATE=CURRENTDATE)
 
-@app.route('/home/', methods=['GET'])
+@application.route('/home/', methods=['GET'])
 def home():
 
     print('Loading home')
 
     return render_template('home.html')
 
-@app.route('/gtaatop3helper/', methods=['GET'])
+@application.route('/gtaatop3helper/', methods=['GET'])
 def gtaatop3helper():
 
     for data in VALUES:
@@ -96,14 +96,14 @@ def gtaatop3helper():
 
     return render_template('gtaatop3helper.html', VALUES=VALUES)
 
-@app.route('/custometfaverage/', methods=['GET'])
+@application.route('/custometfaverage/', methods=['GET'])
 def custometfaverage():
 
     print('Loading custometfaverage')
 
     return render_template('custometfaverage.html')
 
-@app.route('/send_custom_etf/', methods=['POST'])
+@application.route('/send_custom_etf/', methods=['POST'])
 def send_custom_etf():
 
     input_value = request.form.get('input_value_custom_etf')
@@ -115,4 +115,4 @@ def send_custom_etf():
     return render_template('custometfaverageresult.html', RESULT=RESULT)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    application.run(host='0.0.0.0', port=5000)
