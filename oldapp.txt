@@ -1,0 +1,108 @@
+from requests_html import HTMLSession
+import colorama
+from colorama import Fore, Back, Style
+import os
+from datetime import date
+
+# Etf custome class
+
+class ETF:
+    def __init__(self, name, url, query, average, final):
+        self.name = name
+        self.url = url
+        self.query = query
+        self.average = average
+        self.final = final
+
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+# OLD VERSION OF PROGRAMM, DO NOT USE!
+
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# ////////////////////////////////////////////////ETF Values (Name, Url, Qery)//////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+VALUES = [
+    ETF('Xetra Gold', 'https://www.justetf.com/de/etf-profile.html?isin=DE000A0S9GB0&from=search#uebersicht', '/html/body/div[1]/div[3]/div[3]/div[17]/div[4]/div[1]/div/div/table/tbody', '', 'Errro'),
+    ETF('Amundi Global Prime', 'https://www.justetf.com/de/etf-profile.html?query=S%26P++500&isin=LU2089238203&from=search#sparplan', '/html/body/div[1]/div[3]/div[3]/div[18]/div[4]/div[1]/div/div/table/tbody', '', 'Error')
+]
+
+SAVE_LAST_LOG = True
+FILE_NAME = 'resources/gtaatop3_log.txt'
+SAVE_LAST_ONLY = False
+
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s = HTMLSession()
+
+# Get Data from Url and Query and Calculate Average, then print it out
+
+def getDataAndPrintOut(data):
+    _r = s.get(data.url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'})
+
+    _1month = float((_r.html.xpath(f'{data.query}/tr[2]/td[2]', first=True).text)[:-1].replace(',', '.'))
+    _3months = float((_r.html.xpath(f'{data.query}/tr[3]/td[2]', first=True).text)[:-1].replace(',', '.'))
+    _6months = float((_r.html.xpath(f'{data.query}/tr[4]/td[2]', first=True).text)[:-1].replace(',', '.'))
+    _12months = float((_r.html.xpath(f'{data.query}/tr[5]/td[2]', first=True).text)[:-1].replace(',', '.'))
+
+    _average = (float(_1month) + float(_3months) + float(_6months) + float(_12months)) / 4
+
+    if _average > 0:
+        _average = f'{Fore.GREEN}{_average}'
+    else:
+        _average = f'{Fore.RED}{_average}'
+
+    if _1month > 0:
+        _1month = f'{Fore.GREEN}{_1month}'
+    else:
+        _1month = f'{Fore.RED}{_1month}'
+
+    if _3months > 0:
+        _3months = f'{Fore.GREEN}{_3months}'
+    else:
+        _3months = f'{Fore.RED}{_3months}'
+
+    if _6months > 0:
+        _6months = f'{Fore.GREEN}{_6months}'
+    else:
+        _6months = f'{Fore.RED}{_6months}'
+
+    if _12months > 0:
+        _12months = f'{Fore.GREEN}{_12months}'
+    else:
+        _12months = f'{Fore.RED}{_12months}'
+
+    data.average = _average
+    data.final = (f'{Fore.WHITE}---------- \n \n {Fore.YELLOW} {data.name}: \n \n {Fore.WHITE}{Back.YELLOW} Average: {_average}% {Back.RESET} \n {Fore.WHITE} 1 Month: {_1month} % \n {Fore.WHITE} 3 Months: {_3months} % \n {Fore.WHITE} 6 Months: {_6months} % \n {Fore.WHITE} 12 Months: {_12months} % \n')
+
+def write_to_file(file_name, text):
+    if (SAVE_LAST_ONLY == True):
+        f = open(file_name, 'w')
+    else:
+        f = open(file_name, 'a+')
+
+    f.write(text)
+
+    f.close()
+
+    print(f'{Fore.GREEN} Wrote sucessfully in file {FILE_NAME}')
+
+
+for data in VALUES:
+    getDataAndPrintOut(data)
+
+VALUES.sort(key=lambda x: x.average, reverse=True)
+
+currentDate = date.today()
+finalText = f'\n\n{Fore.BLUE}{Back.WHITE} ### ETF GTAA TOP 3 ### SAVER ### SAVE SYSTEM BY MAIXEN STUDIOS ### \n ### SAVED ON {currentDate} ###{Fore.WHITE}{Back.RESET} \n \n'
+
+for data in VALUES:
+    print(data.final)
+    finalText += data.final
+
+if SAVE_LAST_LOG == True:
+    write_to_file(FILE_NAME, finalText)

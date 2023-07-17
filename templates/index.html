@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <nav class="navbar">
+    <div class="container">
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item">
+            <button id="load-home">
+              Home
+            </button>
+          </a>
+          <a class="navbar-item is-selected">
+            <button id="load-gtaatop3helper">
+              GTAA Top 3 Helper
+            </button>
+          </a>
+          <a class="navbar-item is-selected">
+            <button id="load-custometfaverage">
+              Custom ETF Average (justetf.de only!)
+            </button>
+          </a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-dark">Github X </a>
+              <a class="button is-link">Download X </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <section class="hero is-primary is-bold">
+    <div class="hero-body">
+      <p class="title">
+        Home
+      </p>
+      <p class="subtitle">
+        by Maixen Studios
+      </p>
+    </div>
+  </section>
+  <body>
+  <section class="section">
+    <div class="container">
+
+
+
+        <div id="content">
+          
+        </div>
+
+
+
+  </section>
+  </body>
+  <script>
+    $(document).ready(function() {
+
+      $.ajax({
+                    url: "/home/",
+                    type: "GET",
+                    success: function(response) {
+                        $("#content").html(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            $("#load-home").click(function() {
+                $.ajax({
+                    url: "/home/",
+                    type: "GET",
+                    success: function(response) {
+                        $("#content").html(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $("#load-gtaatop3helper").click(function() {
+                $.ajax({
+                    url: "/gtaatop3helper/",
+                    type: "GET",
+                    success: function(response) {
+                        $("#content").html(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $("#load-custometfaverage").click(function() {
+                $.ajax({
+                    url: "/custometfaverage/",
+                    type: "GET",
+                    success: function(response) {
+                        $("#content").html(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+  </script>
+</html>
